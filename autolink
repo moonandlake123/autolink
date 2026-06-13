@@ -13,13 +13,13 @@ for a in args:
         lib = os.path.abspath(a)                      
         t = subprocess.run(['ar', 't', lib], capture_output=True, text=True)
         for m in t.stdout.splitlines():
-            if m.endswith('.cppm'):
+            if not m.endswith('.o') and not m.startswith('__'):
                 if bmi_dir is None:
                     bmi_dir = tempfile.mkdtemp()
                 subprocess.run(['ar', 'x', lib, m], cwd=bmi_dir)
                 subprocess.run([real_cc, '-std=c++20', '--precompile',
                                 f'{bmi_dir}/{m}', '-o',
-                                f'{bmi_dir}/{m}'.replace('.cppm', '.pcm')])
+                                f'{bmi_dir}/{os.path.splitext(m)[0]}.pcm'])
 
 if bmi_dir:
     new_args.insert(0, f'-fprebuilt-module-path={bmi_dir}')
