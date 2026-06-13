@@ -7,7 +7,7 @@ C++20 `-lfoo` cannot discover module interfaces. This prototype provides a solut
 `autolink` is a compiler wrapper, transparent to the existing build process.
 
 When a `.a` archive is passed to the compiler, the script automatically
-scans the archive for `.cppm` module interface source files, extracts
+scans the archive for module interface source files, extracts
 and compiles them to BMI on-the-fly, then injects the BMI path into the
 compiler command. The remaining build proceeds as normal.
 
@@ -45,21 +45,21 @@ ar rcs libhello.a hello.o hello.cppm
 ## Rationale
 
 - The `.a` format has supported arbitrary members since 1971; `ar` imposes
-  no restriction.
+no restriction. The same logic applies to Windows `.lib` archives.
 
 - BMI is compiled locally by the consumer's compiler, ensuring version
-  and flag compatibility.
+and flag compatibility.
 
-- Archives without `.cppm` files are passed through unchanged.
+- Archives containing only object files are passed through unchanged.
 
 ---
 
 ## Limitations
 
 - Verified on Clang 21 under Termux. GCC and MSVC adaptations follow
-  the same logic.
+the same logic.
 
-- `.a` path must be explicit. `.cppm` extension is used for identification.
+- `.a`path must be explicit. The prototype currently uses Clang-specific flags ( --precompile ,  -fprebuilt-module-path ).
 
 ---
 
@@ -77,5 +77,3 @@ standardization, and no modifications to build systems.
 ---
 
 Public domain
-
-
