@@ -4,7 +4,7 @@ C++20 `-lfoo` cannot discover module interfaces. This prototype provides a solut
 
 ---
 
-`autolink` is a compiler wrapper, transparent to the existing build process.
+`autolink` is a compiler wrapper that simulates behavior intended for the compiler driver itself. It is transparent to the existing build process.
 
 When a `.a` archive is passed to the compiler, the script automatically
 scans the archive for module interface source files, extracts
